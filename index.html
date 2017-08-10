@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="http://flab.eng.isas.jaxa.jp/member/oyama/news.png" />
+    <title>NY Times API Project</title>
+    <style>
+        h4 {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        form {
+            width: 500px;
+            height:100px;
+        }
+        div {
+            display: block;
+        }
+        h1 {
+            text-align: center;
+        }
+        #image {
+            text-align: center;
+        }
+
+        form {
+            display: inline-block;
+            margin-left: 250px;
+            text-align: left;
+        }
+        #custom-search-input {
+            width: 200px;
+            height: 20px;
+        }
+        #button {
+            width: 100px;
+            height: 100px;
+            margin-top: 10px;
+        }
+        li {
+            margin-top: 10px;
+            margin-left: 200px;
+            }
+        
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>NY Times API Project</h1>
+        <div id="image">
+        <img src="https://s-media-cache-ak0.pinimg.com/originals/0f/fc/1e/0ffc1eb7a62d64a9e09fa7765fc2850f.jpg">
+        </div>
+        <!-- <h1>Tasks</h1>
+        <ol>
+            <li>Get a NY Times API key.</li>
+            <li>Modify your url with new key.</li>
+            <li>Look at your console.</li>
+            <li>What data do you want to use?</li>
+            <li>List all the articles in the ul</li>
+            <li>Make it pretty</li>
+        </ol>
+        <h1>Bonus</h1>
+        <ol>
+            <li>Add links.</li>
+            <li>Add loading image.</li>
+            <li>Add images from articles</li>
+        </ol> -->
+        <div id="form">
+        <form id="search">
+            <h4>Search for City</h4>
+            <input type="text" id="custom-search-input" name="form" placeholder="Search City"><br>
+            <input type="button" id="button" onclick="customSearch()" value="Submit form">
+        </form>
+        </div>
+
+
+
+        
+
+        <ul id="headlines" style="list-style: none;">
+            <!-- List article titles HERE!!!! -->
+        </ul>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+    <script>
+        function customSearch() {
+            let searchTerm = $('#custom-search-input').val();
+            var form = document.getElementById("search");
+            form.reset();
+            searchTerm = searchTerm.replace(/[^0-9a-zA-Z]/g, '+');
+            nytUrl = `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchTerm}&sort=newest&api-key=0213f6d34394465eb3c8f5f3b73d9508`
+            $.getJSON(nytUrl, function (data) {
+                var myLi = ''
+                //var myLiArr = []
+                console.log(data)
+                //CODE GOES HERE
+                var docs = data.response.docs;
+                for (var i = 0; i < docs.length; i++) {
+                    myLi += `
+                        <a href="${docs[i].web_url}">
+                            <li>${docs[i].headline.main}</li>
+                        </a>
+                        `;
+                    //myLi = myLi + `<li>${docs[i].headline.main}</li>`;
+                    //myLi = `${myLi}<li>${docs[i].headline.main}</li>`;
+                    //myLiArr.push(`<li>${docs[i].headline.main}</li>`);
+                }
+
+
+                document.getElementById("headlines").innerHTML = myLi;
+                //document.getElementById("headlines").innerHTML = myLiArr.join('');
+
+            })
+
+        }
+    </script>
+</body>
